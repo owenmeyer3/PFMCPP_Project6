@@ -59,9 +59,10 @@ Purpose:  This project will show you the difference between member functions and
 
 struct T
 {
-    T(int v, const char* cp){ //1
+    T(int v, const char* cp) //1
+    {
         value = v; 
-        name = *cp;
+        name = cp;
     }
     int value; //2
     std::string name; //3
@@ -79,7 +80,7 @@ struct S //4
 
 struct U
 {
-    float length { 0 }, width { 0 };
+    float length { 2.0f }, width { 2.5f };
     std::string updateLengthGetArea(float* newLength)      //12
     {
         this->length = *newLength;
@@ -120,8 +121,9 @@ struct W
 
 int main()
 {
-    T t1( 1, "A 1"); //6
-    T t2( 2, "B 2"); //6
+
+    T t1( 1, "AAAA"); //6
+    T t2( 2, "BBBB"); //6
     
     auto f = S{}; //7
     auto* smaller = f.compare( &t1, &t2); //8
