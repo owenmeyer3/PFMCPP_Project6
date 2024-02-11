@@ -72,8 +72,15 @@ struct S //4
 {
     T* compare(T* a, T* b) //5
     {
-        if( a->value < b->value ) return a;
-        if( a->value > b->value ) return b;
+        if(a != nullptr && b != nullptr)
+        {
+            if( a->value < b->value ) return a;
+            if( a->value > b->value ) return b;
+        }
+        else
+        {
+            std::cout << "can't compare nullptr argument" << std::endl;
+        }
         return nullptr;
     }
 };
@@ -83,8 +90,16 @@ struct U
     float length { 2.0f }, width { 2.5f };
     std::string updateLengthGetArea(float* newLength)      //12
     {
-        this->length = *newLength;
-        return std::to_string(this->width * this->length);
+        if(newLength != nullptr)
+        {
+            this->length = *newLength;
+            return std::to_string(this->width * this->length);
+        }
+        else
+        {
+            std::cout << "can't update length with a nullptr argument" << std::endl;
+            return "";
+        }
     }
 };
 
@@ -92,16 +107,24 @@ struct W
 {
     static float updateLengthWidthGetArea(U* that, float* newLength )        //10
     {
-        std::cout << "U's length value: " << that->length << std::endl;
-        that->length = *newLength;
-        std::cout << "U's length updated value: " << that->length << std::endl;
-        while( std::abs(that->width - that->length) > 0.001f )
+        if(newLength != nullptr && that != nullptr)
         {
-            // make the distance between that->width and that->length get smaller
-            that->width += ((that->length - that->width) / std::abs(that->width - that->length)) * 0.001f;
+            std::cout << "U's length value: " << that->length << std::endl;
+            that->length = *newLength;
+            std::cout << "U's length updated value: " << that->length << std::endl;
+            while( std::abs(that->width - that->length) > 0.001f )
+            {
+                // make the distance between that->width and that->length get smaller
+                that->width += ((that->length - that->width) / std::abs(that->width - that->length)) * 0.001f;
+            }
+            std::cout << "U's width updated value: " << that->width << std::endl;
+            return that->width * that->length;
         }
-        std::cout << "U's width updated value: " << that->width << std::endl;
-        return that->width * that->length;
+        else
+        {
+            std::cout << "can't update length and width with a nullptr argument" << std::endl;
+            return 0.0f;
+        }
     }
 };
         
