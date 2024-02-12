@@ -95,11 +95,8 @@ struct U
             this->length = *newLength;
             return std::to_string(this->width * this->length);
         }
-        else
-        {
-            std::cout << "can't update length with a nullptr argument" << std::endl;
-            return "";
-        }
+        std::cout << "can't update length with a nullptr argument" << std::endl;
+        return "";
     }
 };
 
@@ -120,11 +117,8 @@ struct W
             std::cout << "U's width updated value: " << that->width << std::endl;
             return that->width * that->length;
         }
-        else
-        {
-            std::cout << "can't update length and width with a nullptr argument" << std::endl;
-            return 0.0f;
-        }
+        std::cout << "can't update length and width with a nullptr argument" << std::endl;
+        return 0.0f;
     }
 };
         
