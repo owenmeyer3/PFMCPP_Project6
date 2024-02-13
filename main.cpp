@@ -46,7 +46,6 @@ struct S
         if( a.value < b.value ) return &a;
         if( a.value > b.value ) return &b;
 
-
         std::cout << "arguments value properties are equivalent" << std::endl;
         return nullptr;
     }
@@ -56,45 +55,36 @@ struct U
 {
     float length { 2.0f }, width { 2.5f };
 
-    float updateLengthWidthGetArea(float* newLength)
+    float updateLengthWidthGetArea(float& newLength)
     {
-        if(newLength != nullptr)
+
+        std::cout << "U's length value: " << this->length << std::endl;
+        this->length = newLength;
+        std::cout << "U's length updated value: " << this->length << std::endl;
+        while( std::abs(this->width - this->length) > 0.001f )
         {
-            std::cout << "U's length value: " << this->length << std::endl;
-            this->length = *newLength;
-            std::cout << "U's length updated value: " << this->length << std::endl;
-            while( std::abs(this->width - this->length) > 0.001f )
-            {
-                // make the distance between that->width and that->length get smaller
-                this->width += ((this->length - this->width) / std::abs(this->width - this->length)) * 0.001f;
-            }
-            std::cout << "U's width updated value: " << this->width << std::endl;
-            return this->width * this->length;
+            // make the distance between that->width and that->length get smaller
+            this->width += ((this->length - this->width) / std::abs(this->width - this->length)) * 0.001f;
         }
-        std::cout << "can't update length and width with a nullptr argument" << std::endl;
-        return 0.0f;
+        std::cout << "U's width updated value: " << this->width << std::endl;
+        return this->width * this->length;
     }
 };
 
 struct W
 {
-    static float updateLengthWidthGetArea(U* that, float* newLength )
+    static float updateLengthWidthGetArea(U& that, float& newLength )
     {
-        if(newLength != nullptr && that != nullptr)
+        std::cout << "U's length value: " << that.length << std::endl;
+        that.length = newLength;
+        std::cout << "U's length updated value: " << that.length << std::endl;
+        while( std::abs(that.width - that.length) > 0.001f )
         {
-            std::cout << "U's length value: " << that->length << std::endl;
-            that->length = *newLength;
-            std::cout << "U's length updated value: " << that->length << std::endl;
-            while( std::abs(that->width - that->length) > 0.001f )
-            {
-                // make the distance between that->width and that->length get smaller
-                that->width += ((that->length - that->width) / std::abs(that->width - that->length)) * 0.001f;
-            }
-            std::cout << "U's width updated value: " << that->width << std::endl;
-            return that->width * that->length;
+            // make the distance between that->width and that->length get smaller
+            that.width += ((that.length - that.width) / std::abs(that.width - that.length)) * 0.001f;
         }
-        std::cout << "can't update length and width with a nullptr argument" << std::endl;
-        return 0.0f;
+        std::cout << "U's width updated value: " << that.width << std::endl;
+        return that.width * that.length;
     }
 };
         
@@ -120,23 +110,20 @@ int main()
     
     auto f = S{};
     auto smaller = f.compare( t1, t2);
-    // smaller is of type T here
-
-    std::cout << smaller << std::endl;
     
-    // if(smaller != nullptr)
-    // {
-    //     std::cout << "the smaller one is << " << smaller->name << std::endl;
-    // }
-    // else
-    // {
-    //     std::cout << "compare arguments values are the same" << std::endl;
-    // }
+    if(smaller != nullptr)
+    {
+        std::cout << "the smaller one is << " << smaller->name << std::endl;
+    }
+    else
+    {
+        std::cout << "compare arguments values are the same" << std::endl;
+    }
     
-    // U box;
-    // float updatedValue = 5.f;
-    // std::cout << "[static func] box's multiplied values: " << W::updateLengthWidthGetArea( &box, &updatedValue) << std::endl; //11
+    U box;
+    float updatedValue = 5.f;
+    std::cout << "[static func] box's multiplied values: " << W::updateLengthWidthGetArea( box, updatedValue) << std::endl; 
     
-    // U prism;
-    // std::cout << "[member func] prism's multiplied values: " << prism.updateLengthWidthGetArea( &updatedValue ) << std::endl;
+    U prism;
+    std::cout << "[member func] prism's multiplied values: " << prism.updateLengthWidthGetArea( updatedValue ) << std::endl;
 }
