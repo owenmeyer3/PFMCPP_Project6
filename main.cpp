@@ -168,5 +168,5 @@ int main()
     std::cout << "[static func] box's multiplied values: " << W::updateLengthWidthGetArea( &box, &updatedValue) << std::endl; //11
     
     U prism;
-    std::cout << "[member func] prism's multiplied values: " << prism.updateLengthGetArea( &updatedValue ) << std::endl;
+    std::cout << "[member func] prism's multiplied values: " << prism.updateLengthWidthGetArea( &updatedValue ) << std::endl;
 }
