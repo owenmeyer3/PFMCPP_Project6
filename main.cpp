@@ -88,15 +88,24 @@ struct S //4
 struct U
 {
     float length { 2.0f }, width { 2.5f };
-    std::string updateLengthGetArea(float* newLength)      //12
+
+    float updateLengthWidthGetArea(float* newLength)      //12
     {
         if(newLength != nullptr)
         {
+            std::cout << "U's length value: " << this->length << std::endl;
             this->length = *newLength;
-            return std::to_string(this->width * this->length);
+            std::cout << "U's length updated value: " << this->length << std::endl;
+            while( std::abs(this->width - this->length) > 0.001f )
+            {
+                // make the distance between that->width and that->length get smaller
+                this->width += ((this->length - this->width) / std::abs(this->width - this->length)) * 0.001f;
+            }
+            std::cout << "U's width updated value: " << this->width << std::endl;
+            return this->width * this->length;
         }
-        std::cout << "can't update length with a nullptr argument" << std::endl;
-        return "";
+        std::cout << "can't update length and width with a nullptr argument" << std::endl;
+        return 0.0f;
     }
 };
 
