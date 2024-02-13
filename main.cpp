@@ -56,48 +56,78 @@ Purpose:  This project will show you the difference between member functions and
 
 #include <iostream>
 #include <string>
+
 struct T
 {
-    T(<#type name#> v, const char* <#variable name#>)   //1
-    //2
-    //3
+    T(int v, const char* cp) //1
+    {
+        value = v; 
+        name = cp;
+    }
+    int value; //2
+    std::string name; //3
 };
 
-struct <#structName1#>                                //4
+struct S //4
 {
-    <#type name#> compare(<#type name#> a, <#type name#> b) //5
+    T* compare(T* a, T* b) //5
     {
-        if( a->value < b->value ) return a;
-        if( a->value > b->value ) return b;
+        if(a != nullptr && b != nullptr)
+        {
+            if( a->value < b->value ) return a;
+            if( a->value > b->value ) return b;
+        }
+        else
+        {
+            std::cout << "can't compare nullptr argument" << std::endl;
+        }
         return nullptr;
     }
 };
 
 struct U
 {
-    float <#name1#> { 0 }, <#name2#> { 0 };
-    <#returnType#> <#memberFunction#>(<#type name#>* <#updatedValue#>)      //12
+    float length { 2.0f }, width { 2.5f };
+
+    float updateLengthWidthGetArea(float* newLength)      //12
     {
-        
+        if(newLength != nullptr)
+        {
+            std::cout << "U's length value: " << this->length << std::endl;
+            this->length = *newLength;
+            std::cout << "U's length updated value: " << this->length << std::endl;
+            while( std::abs(this->width - this->length) > 0.001f )
+            {
+                // make the distance between that->width and that->length get smaller
+                this->width += ((this->length - this->width) / std::abs(this->width - this->length)) * 0.001f;
+            }
+            std::cout << "U's width updated value: " << this->width << std::endl;
+            return this->width * this->length;
+        }
+        std::cout << "can't update length and width with a nullptr argument" << std::endl;
+        return 0.0f;
     }
 };
 
-struct <#structname2#>
+struct W
 {
-    static <#returntype#> <#staticFunctionA#>(U* that, <#type name#>* <#updatedValue#> )        //10
+    static float updateLengthWidthGetArea(U* that, float* newLength )        //10
     {
-        std::cout << "U's <#name1#> value: " << that-><#name1#> << std::endl;
-        that-><#name1#> = <#updatedValue#>;
-        std::cout << "U's <#name1#> updated value: " << that-><#name1#> << std::endl;
-        while( std::abs(that-><#name2#> - that-><#name1#>) > 0.001f )
+        if(newLength != nullptr && that != nullptr)
         {
-            /*
-             write something that makes the distance between that-><#name2#> and that-><#name1#> get smaller
-             */
-            that-><#name2#> += ;
+            std::cout << "U's length value: " << that->length << std::endl;
+            that->length = *newLength;
+            std::cout << "U's length updated value: " << that->length << std::endl;
+            while( std::abs(that->width - that->length) > 0.001f )
+            {
+                // make the distance between that->width and that->length get smaller
+                that->width += ((that->length - that->width) / std::abs(that->width - that->length)) * 0.001f;
+            }
+            std::cout << "U's width updated value: " << that->width << std::endl;
+            return that->width * that->length;
         }
-        std::cout << "U's <#name2#> updated value: " << that-><#name2#> << std::endl;
-        return that-><#name2#> * that-><#name1#>;
+        std::cout << "can't update length and width with a nullptr argument" << std::endl;
+        return 0.0f;
     }
 };
         
@@ -117,17 +147,26 @@ struct <#structname2#>
 
 int main()
 {
-    T <#name1#>( , );                                             //6
-    T <#name2#>( , );                                             //6
+
+    T t1( 1, "AAAA"); //6
+    T t2( 2, "BBBB"); //6
     
-    <#structName1#> f;                                            //7
-    auto* smaller = f.compare( , );                              //8
-    std::cout << "the smaller one is << " << smaller->name << std::endl; //9
+    auto f = S{}; //7
+    auto* smaller = f.compare( &t1, &t2); //8
     
-    U <#name3#>;
+    if(smaller != nullptr) //9
+    {
+        std::cout << "the smaller one is << " << smaller->name << std::endl;
+    }
+    else
+    {
+        std::cout << "compare arguments values are the same" << std::endl;
+    }
+    
+    U box;
     float updatedValue = 5.f;
-    std::cout << "[static func] <#name3#>'s multiplied values: " << <#structname2#>::<#staticFunctionA#>( , ) << std::endl;                  //11
+    std::cout << "[static func] box's multiplied values: " << W::updateLengthWidthGetArea( &box, &updatedValue) << std::endl; //11
     
-    U <#name4#>;
-    std::cout << "[member func] <#name4#>'s multiplied values: " << <#name4#>.<#memberFunction#>( &updatedValue ) << std::endl;
+    U prism;
+    std::cout << "[member func] prism's multiplied values: " << prism.updateLengthWidthGetArea( &updatedValue ) << std::endl;
 }
