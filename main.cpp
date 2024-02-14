@@ -30,28 +30,23 @@ Create a branch named Part2
 
 struct T
 {
-    T(int v, const char* cp) //1
+    T(int v, const char* cp)
     {
         value = v; 
         name = cp;
     }
-    int value; //2
-    std::string name; //3
+    int value;
+    std::string name;
 };
 
-struct S //4
+struct S
 {
-    T* compare(T* a, T* b) //5
+    T* compare(T& a, T& b)
     {
-        if(a != nullptr && b != nullptr)
-        {
-            if( a->value < b->value ) return a;
-            if( a->value > b->value ) return b;
-        }
-        else
-        {
-            std::cout << "can't compare nullptr argument" << std::endl;
-        }
+        if( a.value < b.value ) return &a;
+        if( a.value > b.value ) return &b;
+
+        std::cout << "arguments value properties are equivalent" << std::endl;
         return nullptr;
     }
 };
@@ -60,45 +55,36 @@ struct U
 {
     float length { 2.0f }, width { 2.5f };
 
-    float updateLengthWidthGetArea(float* newLength)      //12
+    float updateLengthWidthGetArea(float& newLength)
     {
-        if(newLength != nullptr)
+
+        std::cout << "U's length value: " << this->length << std::endl;
+        this->length = newLength;
+        std::cout << "U's length updated value: " << this->length << std::endl;
+        while( std::abs(this->width - this->length) > 0.001f )
         {
-            std::cout << "U's length value: " << this->length << std::endl;
-            this->length = *newLength;
-            std::cout << "U's length updated value: " << this->length << std::endl;
-            while( std::abs(this->width - this->length) > 0.001f )
-            {
-                // make the distance between that->width and that->length get smaller
-                this->width += ((this->length - this->width) / std::abs(this->width - this->length)) * 0.001f;
-            }
-            std::cout << "U's width updated value: " << this->width << std::endl;
-            return this->width * this->length;
+            // make the distance between that->width and that->length get smaller
+            this->width += ((this->length - this->width) / std::abs(this->width - this->length)) * 0.001f;
         }
-        std::cout << "can't update length and width with a nullptr argument" << std::endl;
-        return 0.0f;
+        std::cout << "U's width updated value: " << this->width << std::endl;
+        return this->width * this->length;
     }
 };
 
 struct W
 {
-    static float updateLengthWidthGetArea(U* that, float* newLength )        //10
+    static float updateLengthWidthGetArea(U& that, float& newLength )
     {
-        if(newLength != nullptr && that != nullptr)
+        std::cout << "U's length value: " << that.length << std::endl;
+        that.length = newLength;
+        std::cout << "U's length updated value: " << that.length << std::endl;
+        while( std::abs(that.width - that.length) > 0.001f )
         {
-            std::cout << "U's length value: " << that->length << std::endl;
-            that->length = *newLength;
-            std::cout << "U's length updated value: " << that->length << std::endl;
-            while( std::abs(that->width - that->length) > 0.001f )
-            {
-                // make the distance between that->width and that->length get smaller
-                that->width += ((that->length - that->width) / std::abs(that->width - that->length)) * 0.001f;
-            }
-            std::cout << "U's width updated value: " << that->width << std::endl;
-            return that->width * that->length;
+            // make the distance between that->width and that->length get smaller
+            that.width += ((that.length - that.width) / std::abs(that.width - that.length)) * 0.001f;
         }
-        std::cout << "can't update length and width with a nullptr argument" << std::endl;
-        return 0.0f;
+        std::cout << "U's width updated value: " << that.width << std::endl;
+        return that.width * that.length;
     }
 };
         
@@ -119,13 +105,13 @@ struct W
 int main()
 {
 
-    T t1( 1, "AAAA"); //6
-    T t2( 2, "BBBB"); //6
+    T t1( 1, "AAAA");
+    T t2( 2, "BBBB");
     
-    auto f = S{}; //7
-    auto* smaller = f.compare( &t1, &t2); //8
+    auto f = S{};
+    auto smaller = f.compare( t1, t2);
     
-    if(smaller != nullptr) //9
+    if(smaller != nullptr)
     {
         std::cout << "the smaller one is << " << smaller->name << std::endl;
     }
@@ -136,8 +122,8 @@ int main()
     
     U box;
     float updatedValue = 5.f;
-    std::cout << "[static func] box's multiplied values: " << W::updateLengthWidthGetArea( &box, &updatedValue) << std::endl; //11
+    std::cout << "[static func] box's multiplied values: " << W::updateLengthWidthGetArea( box, updatedValue) << std::endl; 
     
     U prism;
-    std::cout << "[member func] prism's multiplied values: " << prism.updateLengthWidthGetArea( &updatedValue ) << std::endl;
+    std::cout << "[member func] prism's multiplied values: " << prism.updateLengthWidthGetArea( updatedValue ) << std::endl;
 }
